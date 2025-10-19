@@ -1,0 +1,82 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:SmartSupplyGUI.ViewModels"
+        mc:Ignorable="d"
+        x:Class="SmartSupplyGUI.MainWindow"
+        Title="SmartSupply Dashboard"
+        Width="900" Height="600"
+        Background="White"
+        x:CompileBindings="False">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*,Auto" Margin="20">
+
+        <!-- Titel -->
+        <TextBlock Grid.ColumnSpan="2" Text="SmartSupply Dashboard"
+                   FontSize="26" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <!-- Venstre side -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,15,0">
+            <TextBlock Text="Queued Orders" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+            <ListBox ItemsSource="{Binding QueuedOrders}" Height="100">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Customer}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Text="Processed Orders" FontWeight="Bold" FontSize="16" Margin="0,15,0,8"/>
+            <ListBox ItemsSource="{Binding ProcessedOrders}" Height="180">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Customer}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Total, StringFormat='Total: {0:N2} kr.'}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <!-- Højre side -->
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="Inventory" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+            <ListBox ItemsSource="{Binding InventoryItems}" Height="180">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="{Binding Name}" Width="120"/>
+                            <TextBlock Text="{Binding Quantity, StringFormat='Qty: {0}'}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Text="Low Stock Items (&lt;5)" FontWeight="Bold" FontSize="16" Margin="0,15,0,8"/>
+            <ListBox ItemsSource="{Binding LowStockItems}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="Red"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <!-- Bund -->
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,15,0,0">
+            <Button Content="Process Next Order"
+                    Command="{Binding ProcessNextOrderCommand}"
+                    Width="200" Height="35" Margin="0,0,15,0"/>
+            <TextBlock Text="{Binding TotalRevenue, StringFormat='Total Revenue: {0:N2} kr.'}"
+                       FontWeight="Bold" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>
+
+
